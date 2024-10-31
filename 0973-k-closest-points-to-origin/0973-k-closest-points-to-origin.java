@@ -1,21 +1,14 @@
 class Solution {
     public int[][] kClosest(int[][] points, int k) {
-        ArrayList<int[]> ansList = new ArrayList<>();
-        int[] values = new int[points.length];
-        ArrayList<Integer> valueList = new ArrayList<>();
-        for(int i = 0;i<points.length;i++) {
-            valueList.add(i);
-            values[i] = (int)Math.pow(points[i][0], 2) + (int)Math.pow(points[i][1], 2);
-        }
         
-        Collections.sort(valueList, (a, b) -> {
-            return values[a] - values[b];
+        Arrays.sort(points, (a, b) -> {
+            return ((int)Math.pow(a[0], 2) + (int)Math.pow(a[1], 2)) - ((int)Math.pow(b[0], 2) + (int)Math.pow(b[1], 2));
         });
         
-        System.out.println(valueList);
+        int[][] answer = new int[k][2];
         for(int i = 0;i<k;i++) {
-            ansList.add(points[valueList.get(i)]);
+            answer[i] = points[i];
         }
-        return ansList.toArray(new int[ansList.size()][]);
+        return answer;
     }
 }
