@@ -36,13 +36,9 @@ class Solution {
         
         for(Node next: node.neighbors) {
             pool[node.val].neighbors.add(pool[next.val]);
-        }
-
-        for(Node next: node.neighbors) {
             if (v[next.val]) continue;
             v[next.val] = true;
             dfs(next, pool, v);
-        }
-        
+        }   
     }
 }
