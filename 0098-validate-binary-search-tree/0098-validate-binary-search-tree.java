@@ -29,20 +29,25 @@ class Solution {
     }
     static void dfs(TreeNode node, long lmin, long lmax, long rmin, long rmax) {
         
+
         if (node.left != null && (node.left.val <= lmin || node.left.val >= lmax)) {
             isBroken = true;
         }
+
+        //System.out.println("node: "+node.val+" lmin: "+lmin +" lmax: "+lmax+" rmin: "+ rmin+" rmax: "+rmax+" isBroken: "+isBroken);
 
         if (node.right != null && (node.right.val <= rmin || node.right.val >= rmax)) {
             isBroken = true;
         }
 
+        //System.out.println("node: "+node.val+" lmin: "+lmin +" lmax: "+lmax+" rmin: "+ rmin+" rmax: "+rmax+" isBroken: "+isBroken);
+
         if (!isBroken && node.left != null) {
-            dfs(node.left, lmin, lmax, node.left.val, node.val);
+            dfs(node.left, lmin, node.left.val, node.left.val, node.val);
         }
 
         if (!isBroken && node.right != null) {
-            dfs(node.right, node.val, node.right.val, rmin, rmax);
+            dfs(node.right, node.val, node.right.val, node.right.val, rmax);
         }
 
         if (isBroken) {
