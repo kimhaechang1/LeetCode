@@ -18,11 +18,18 @@ class Solution {
     static int rootVal;
     public boolean isValidBST(TreeNode root) {
 
-        // 정의하자면, 이진검색트리이기 때문에 각 노드의 키 값이 올 수 있는것이 정해져있다.
+        // 이진검색트리이기 때문에 각 노드의 키 값이 올 수 있는것이 정해져있다. 
+        
+        // 그래서 왼쪽과 오른쪽의 노드가 올 수 있는 범위를 정해야 한다.
+
         // 그 범위를 결정지을 수 있는 방법은, 만약 왼쪽과 오른쪽이 각각 다르다.
-        // 오른쪽 자식노드로 가는경우: 해당 오른쪽 자식의 왼쪽값의 범위는 부모노드가 최소가 되고, 오른쪽 자식노드가 최대가 된다.
-        // 왼쪽 자식노드로 가는경우: 왼쪽 자식노드의 오른쪽값의 범위는 부모노드가 최대가 되고, 왼쪽 자식노드가 최소가 된다.
-        // 위의 조건범위를 만족하지 못한다면, invalidate 가 된다.
+
+        // 현재 노드를 기준으로 왼쪽자식과 오른쪽 자식이 이진트리 특성상 범위에 합당한지 검사하는것이고, 
+        
+        // 그 범위가 언제 업데이트 되는지를 결정지으면 된다.
+
+        // 또다른 solution으로 이진검색트리를 중위순회한 결과는 언제나 오름차순이라것으로 풀 수 있다.
+        
         isBroken = false;
         dfs(root, (long)Integer.MIN_VALUE - 10, root.val, root.val, (long)Integer.MAX_VALUE + 10);
         return !isBroken;
@@ -34,13 +41,10 @@ class Solution {
             isBroken = true;
         }
 
-        //System.out.println("node: "+node.val+" lmin: "+lmin +" lmax: "+lmax+" rmin: "+ rmin+" rmax: "+rmax+" isBroken: "+isBroken);
 
         if (node.right != null && (node.right.val <= rmin || node.right.val >= rmax)) {
             isBroken = true;
         }
-
-        //System.out.println("node: "+node.val+" lmin: "+lmin +" lmax: "+lmax+" rmin: "+ rmin+" rmax: "+rmax+" isBroken: "+isBroken);
 
         if (!isBroken && node.left != null) {
             dfs(node.left, lmin, node.left.val, node.left.val, node.val);
