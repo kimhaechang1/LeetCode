@@ -10,17 +10,32 @@ class Solution {
         int end = start;
         int answerLen = s.length();
         int targetLen = t.length();
+        int cnt = 0; // 윈도우 내에 종류별 필요개수를 만족한 개수
+        int maxCnt = origin.size(); // 그러한 종류의 최대치
         String answer = "";
         while(end < s.length()) {
             int len = end - start + 1;
-            window.put(frags[end], window.getOrDefault(frags[end], 0) + 1);
-            if (len >= targetLen) {
-                while(start <= end && check(origin, window)) {
+            if (origin.containsKey(frags[end])) {
+                int wc = window.getOrDefault(frags[end], 0);
+                if (wc + 1 == origin.get(frags[end])) {
+                    // 해당 종류의 요구치를 만족한 경우 요구치 만족개수를 증가시킨다.
+                    cnt++;
+                }
+                window.put(frags[end], wc + 1);
+            }
+            if (cnt == maxCnt) {
+                while(start <= end) {
                     if (answerLen >= end - start + 1) {
                         answerLen = end - start + 1;
                         answer = s.substring(start, end + 1);
                     }
-                    window.put(frags[start], window.getOrDefault(frags[start], 0) - 1);
+                    if (origin.containsKey(frags[start])) {
+                        int wc = window.get(frags[start]);
+                        if (wc - 1 < origin.get(frags[start])) {
+                            break;
+                        }
+                        window.put(frags[start], wc - 1);
+                    }
                     start++;
                 }
             }
