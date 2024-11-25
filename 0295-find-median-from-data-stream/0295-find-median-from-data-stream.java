@@ -12,7 +12,6 @@ class MedianFinder {
     }
     
     public void addNum(int num) {
-        //System.out.println("add: "+num);
         int maxSz = maxPQ.size();
         int minSz = minPQ.size();
         if (minSz == maxSz) {
@@ -38,24 +37,15 @@ class MedianFinder {
                 minPQ.add(num);
             }
         }
-        //System.out.println("up: "+maxPQ);
-        //System.out.println("down: "+minPQ);
-        //System.out.println("################");
     }
     
     public double findMedian() {
-        //System.out.println("find median");
         int maxSz = maxPQ.size();
         int minSz = minPQ.size();
-        //System.out.println("maxSz: "+maxSz+" minSz: "+minSz);
         
         if (maxSz == minSz) {
-            //System.out.println("med: "+ (((double)minPQ.peek() + maxPQ.peek()) / 2));
-            //System.out.println("###################");
             return ((double)minPQ.peek() + maxPQ.peek()) / 2;
         } else {
-           // System.out.println("med: "+ (double)maxPQ.peek());
-            //System.out.println("###################");
             return (double)maxPQ.peek();
         }
         
