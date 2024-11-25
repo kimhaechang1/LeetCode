@@ -1,25 +1,25 @@
-import java.util.*;
-
 class Solution {
-    static int n;
+    public static final int INIT = -1_111_111_111;
     public int majorityElement(int[] nums) {
-        n = nums.length;
+        // majority element 는 n / 2 번 이상 등장하는 원소를 말한다.
+        int n = nums.length;
+        int target = n % 2 == 0 ? n / 2 : (n / 2) + 1;
         Arrays.sort(nums);
-        int cnt = (int)Math.ceil((double)n/2);
-        int c = 0;
-        int prev = -1111111111;
-        int pointer = 0;
-        for(;pointer<n;pointer++){
-            if(prev != nums[pointer]){
-                c = 1;
-                prev = nums[pointer];
-            }else{
-                c++;
+        int prev = INIT;
+        int cnt = 0;
+        int ans = 0;
+        for(int i = 0; i<n;i++) {
+            if (prev == nums[i]) {
+                cnt++;
+            } else {
+                cnt = 1;
+                prev = nums[i];
             }
-            if(c == cnt){
+            if (cnt == target) {
+                ans = nums[i];
                 break;
             }
         }
-        return nums[pointer];
+        return ans;
     }
 }
