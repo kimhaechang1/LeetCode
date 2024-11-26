@@ -16,14 +16,9 @@ class Solution {
             return memo.get(s);
         }
 
-        if ("".equals(s)) {
-            return 1;
-        }
         memo.put(s, 0);
         for(int i = 0;i<wordDict.size();i++) {
-            //System.out.println("target: "+s+" spliter: "+wordDict.get(i));
             String[] splits = s.split(wordDict.get(i));
-            //System.out.println("split result: "+Arrays.toString(splits));
             if (splits.length == 0) {
                 memo.put(s, 1);
                 return memo.get(s);
@@ -36,7 +31,6 @@ class Solution {
                     isFrags = false;
                     break;
                 }
-                //System.out.println("s: "+s+" splits: "+splits[j]);
             }
             if (isFrags) memo.put(s, 1);
         }
