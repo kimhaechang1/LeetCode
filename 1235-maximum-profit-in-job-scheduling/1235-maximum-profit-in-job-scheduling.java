@@ -28,12 +28,6 @@ class Solution {
             return a[0] - b[0];
         });
 
-        for(int i = 0;i < startTime.length;i++) {
-            ArrayList<Integer> idxList = timeMap.containsKey(info[i][0]) ? timeMap.get(info[i][0]) : new ArrayList<>();
-            idxList.add(i);
-            timeMap.put(info[i][0], idxList);
-        }
-
         dp = new int[startTime.length];
         Arrays.fill(dp, -1); // 이익의 음수는 없으므로
 
@@ -55,17 +49,29 @@ class Solution {
         dp[depth] = 0;
         // 현재 작업을 선택하고 이어붙인 경우
         int a = info[depth][2];
-        Map.Entry<Integer, ArrayList<Integer>> entry = timeMap.ceilingEntry(info[depth][1]);
-        if (entry != null) {
-            ArrayList<Integer> idxList = entry.getValue();
-            for(int idx: idxList) {
-                a = Math.max(a, info[depth][2] + dfs(idx, info));
-            }
+        int next = search(depth + 1, info.length - 1, info, info[depth][1]);
+        if (next != -1) {
+            a = Math.max(a, info[depth][2] + dfs(next, info));
         }
         // 현재 작업을 선택안한 경우
         int b = dfs(depth + 1, info);
         
         dp[depth] = Math.max(a, b);
         return dp[depth];
+    }
+    static int search(int s, int e, int[][] info,  int find) {
+        int ans = -1;
+
+        while(s <= e) {
+            int mid = (s + e) / 2;
+            
+            if (info[mid][0] >= find) {
+                ans = mid;
+                e = mid - 1;
+            } else {
+                s = mid + 1;
+            }
+        }
+        return ans;
     }
 }
