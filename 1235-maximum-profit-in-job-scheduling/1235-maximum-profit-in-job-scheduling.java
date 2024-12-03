@@ -14,9 +14,11 @@ class Solution {
     }
     public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
         
-        Sol1 sol = new Sol1();
+        Sol1 sol1 = new Sol1();
+        Sol2 sol2 = new Sol2();
+        Sol3 sol3 = new Sol3();
         
-        return sol.solution(startTime, endTime, profit);
+        return sol2.solution(startTime, endTime, profit);
     }
 
     static class Sol1 {
