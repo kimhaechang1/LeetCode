@@ -11,6 +11,7 @@ class Solution {
             set.add(pp);
         }
         int[] window = new int[26];
+
         int index = 0;
         int cc = 0;
         int maxCnt = set.size();
@@ -24,13 +25,13 @@ class Solution {
         int start = 0;
         int end = index - 1;
         
-        // System.out.println(Arrays.toString(cnt)+" cc: "+cc);
         while(end < s.length()) {
-            // System.out.println("start: "+start+" end: "+end+" window: "+Arrays.toString(window));
+            if (start == 10001) {
+            }
             if (cc == maxCnt) {
                 answer.add(start);
             }
-            if (window[s.charAt(start) - 'a'] - 1 < cnt[s.charAt(start) - 'a']) {
+            if (window[s.charAt(start) - 'a'] == cnt[s.charAt(start) - 'a']) {
                 cc--;
             }
             window[s.charAt(start) - 'a']--;
