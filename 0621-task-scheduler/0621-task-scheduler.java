@@ -19,6 +19,7 @@ class Solution {
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
             return b[0] - a[0];
         });
+        // 작업 대기자 명단
         System.out.println(Arrays.toString(taskCnt));
         for(int i = 0;i < 26 ;i++) {
             if (taskCnt[i] <= 0) continue;
@@ -27,30 +28,27 @@ class Solution {
 
         int time = 0;
         Queue<int[]> tempQueue = new ArrayDeque<>();
-        // 작업에 들어간 시각을 기준으로 pq에 넣는다.
+        // 작업중인 명단
 
         while(!pq.isEmpty() || !tempQueue.isEmpty()) {
            
-            if (pq.isEmpty()) time = tempQueue.peek()[1] + n + 1;
+            if (pq.isEmpty()) time = tempQueue.peek()[1];
+            // 마지막으로 작업에 들어간 해당 작업의 끝나는 시각이 정답이 된다.
 
-            while(!tempQueue.isEmpty() && tempQueue.peek()[1] + n < time) {
+            while(!tempQueue.isEmpty() && tempQueue.peek()[1] <= time) {
+                // 작업중 명단에 들어간 task 중 작업이 끝난 task는 다시 작업 대기자 큐에 들어간다.
                 pq.add(tempQueue.poll());
             }
 
             int[] task = pq.poll();
-            task[1] = time++;
+            task[1] = time + n + 1;
             task[0]--;
             
             if (task[0] > 0) tempQueue.add(new int[]{task[0], task[1]});
+            // 작업 횟수가 끝난 작업은 작업큐에 들어갈 필요가 없다. (순서상 개수를 구하는 문제이기 때문)
+            time++;
             
         }
         return time;
-    }
-    // A B A C A G A D
-    static boolean check() {
-        for(int i = 0;i < 26;i++) {
-            if (taskCnt[i] > 0) return false;
-        }
-        return true;
     }
 }
