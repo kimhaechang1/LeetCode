@@ -8,49 +8,45 @@ class Solution {
         
         // 최소가 될려면, 최대한 빡빡하게 작업을 넣어야 한다.
         
-        // int cnt = 0;
         taskCnt = new int[26];
         for(char task: tasks) taskCnt[task - 'A']++;
         
         int answer = 0;
         time = new int[26];
-        // A B C D E A B C D A B C
+        // 우선순위 큐를 사용해서 작업을 최적화 시켜보자
+        // 우선적으로 처리해야하는 작업의 기준은, 많이 남은 작업을 빨리 깎는게 좋다.
         int index = 0;
-        while(!check()) {
-            boolean canGo = false;
-            int findIdx = -1;
-            int prevIdx = index;
-            while(true) {
-                if (!canGo && taskCnt[index] > 0 && time[index] == 0) {
-                    //System.out.println("select: "+(char)(index + 'A'));
-                    findIdx = index;
-                    canGo = true;
-                    break;
-                }
-                index++;
-                if (index >= 26) {
-                    index = 0;
-                }
-                if (index == prevIdx) {
-                    break;
-                }
-            }
-            for(int i = 0; i < 26; i++) {
-                if (i != findIdx && time[i] > 0) {
-                    time[i]--;
-                }
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return b[0] - a[0];
+        });
+        System.out.println(Arrays.toString(taskCnt));
+        for(int i = 0;i < 26 ;i++) {
+            if (taskCnt[i] <= 0) continue;
+            pq.add(new int[]{taskCnt[i], 0});
+        }
+
+        int time = 0;
+        Queue<int[]> tempQueue = new ArrayDeque<>();
+        // 작업에 들어간 시각을 기준으로 pq에 넣는다.
+
+        while(!pq.isEmpty() || !tempQueue.isEmpty()) {
+           
+            if (pq.isEmpty()) time = tempQueue.peek()[1] + n + 1;
+
+            while(!tempQueue.isEmpty() && tempQueue.peek()[1] + n < time) {
+                pq.add(tempQueue.poll());
             }
 
-            if (!canGo) {
-                //System.out.println("select: idle");
-            } else { 
-                time[findIdx] = n;
-                taskCnt[findIdx]--;
-            }
-            answer++;
+            int[] task = pq.poll();
+            task[1] = time++;
+            task[0]--;
+            
+            if (task[0] > 0) tempQueue.add(new int[]{task[0], task[1]});
+            
         }
-        return answer;
+        return time;
     }
+    // A B A C A G A D
     static boolean check() {
         for(int i = 0;i < 26;i++) {
             if (taskCnt[i] > 0) return false;
