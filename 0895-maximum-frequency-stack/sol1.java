@@ -2,7 +2,8 @@ class FreqStack {
     HashMap<Integer, Integer> cntMap; // elem -> freq
     List<Stack<Integer>> freqSt; // freq -> stack
     public FreqStack() {
-        
+
+        // 28ms
         // 스택에 push 하고, 가장 빈도수가 높은 요소를 pop한다.
         // 만약 빈도수가 똑같다면, 더 출구에 가까운 요소를 pop 한다.
         // 쉽게 생각해서, 더 나중에 들어온 요소를 pop한단 얘기?
