@@ -28,7 +28,6 @@ class Solution {
         }
         int index = 0;
         while(!queue.isEmpty()) {
-            int size = queue.size();
             int node = queue.poll();
             answer[index++] = node;
             for(int next: g[node]) {
