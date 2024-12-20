@@ -29,15 +29,13 @@ class Solution {
         int index = 0;
         while(!queue.isEmpty()) {
             int size = queue.size();
-            for(int i = 0;i < size;i ++) {
-                int node = queue.poll();
-                answer[index++] = node;
-                for(int next: g[node]) {
-                    indegree[next]--;
-                    if (indegree[next] == 0) {
-                        v[next] = true;
-                        queue.add(next);
-                    }
+            int node = queue.poll();
+            answer[index++] = node;
+            for(int next: g[node]) {
+                indegree[next]--;
+                if (indegree[next] == 0) {
+                    v[next] = true;
+                    queue.add(next);
                 }
             }
         }
