@@ -41,12 +41,7 @@ class Solution {
                 }
             }
         }
-        for(int i= 0;i < n;i++) {
-            // 모든 그래프내의 간선을 정렬하는것이기에, 방문이 안된 노드가 존재한다는 것은 사이클이 존재한다는 것이다.
-            if (!v[i]) return new int[]{};
-        }
-
-
-        return answer;
+        // 모든 그래프내의 간선을 정렬하는것이기에, 방문이 안된 노드가 존재한다는 것은 사이클이 존재한다는 것이다.
+        return index == n ? answer: new int[]{};
     }
 }
