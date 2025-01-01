@@ -6,22 +6,28 @@ class Solution {
         // 더 가깝다의 정의는 둘의 차이가 다른 수와의 차이보다 절댓값으로 더 작거나
         // 같은경우 비교대상 수들의 순서상 더 작은 수
 
-        ArrayList<int[]> dataList = new ArrayList<>();
+        // 다른 풀이라고 하면 어짜피 정렬되어 있는 숫자들에 대해서 생각해보자.
+
+        // 연속적으로 볼 수 있는 수들이기 때문에 k개의 크기만 맞출 수 있으면 상관없다.
+        // 그리고 만약 절댓값 차가 더 크다면 큰쪽을 줄이는건 자명하며,
+        // 절댓값 차가 같으면 둘 중 end를 줄이는것이 자명하다.
+        int start = 0;
+        int end = arr.length - 1;
+        while((end - start + 1) > k) {
+            int left = Math.abs(arr[start] - x);
+            int right = Math.abs(arr[end] - x);
+            if (left < right) {
+                end--;
+            } else if (left > right) {
+                start++;
+            } else {
+                end--;
+            }
+        }
         List<Integer> answer = new ArrayList<>();
-        for(int i = 0; i < arr.length; i++) {
-            dataList.add(new int[]{arr[i], Math.abs(arr[i] - x)});
+        for(int i = start; i <= end;i++) {
+            answer.add(arr[i]);
         }
-        Collections.sort(dataList, (a, b) -> {
-            if (a[1] == b[1]) {
-                return a[0] - b[0];
-            } 
-            return a[1] - b[1];
-        });
-        
-        for(int i = 0;i < k;i++) {
-            answer.add(dataList.get(i)[0]);
-        }
-        Collections.sort(answer);
         return answer;
     }
 }
