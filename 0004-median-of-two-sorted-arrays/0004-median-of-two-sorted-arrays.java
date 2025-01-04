@@ -13,63 +13,72 @@ class Solution {
     }
     public double sol(int[] small, int[] large) {
         
-        // 정렬되어 있는 배열 및 경계선을 핵심 키워드로 생각해보자.
-        // 전체 배열의 크기는 n + m 이다.
-        // 그러면 전체 배열에서 중앙까지 필요한 원소의 개수가 있을것, 이를 totalMid라고 하자.
-        // 그 중앙 개수를 채우는것은 반드시 small과 large의 특정 범위일 것이다.
-        // 아웃오브 바운드를 생각해서 small을 기준으로 범위를 지정하자.
-        // 그리고 small에서 merge 배열에 중앙까지 채울 개수를 lCnt, 반대를 rCnt라고 했을 때,
-        // lCnt - 1이 경계선에 놓인값이고 lCnt는 경계선 밖의 값
-        // rCnt도 마찬가지이다.
-        // 각 배열별 경계선에서 경계선보다 높은 값보다 서로의 반대편 경계선값은 작아야 한다.
-        // 무슨말이냐면 lCnt - 1이 l배열의 경계선, lCnt가 경계선 바로 밖의 값이라고 정의하고 r배열도 마찬가지로 정의하자.
-        // lCnt - 1 <= rCnt 면서 lCnt >= rCnt - 1이어야 한단 뜻이다. 이러면 정답을 구할 수 있다.
-        // 반대로 만약 lCnt - 1 > rCnt 가 되어버리면? 그 땐 l배열의 개수를 하나 줄이고 r배열의 개수를 하나 늘려야 한다. 
-        // 전체 개수는 항상 정해져 있음을 까먹지 말자
+        // 정렬된 두 배열을 이용해보자.
+        // 정렬이라면 무엇보다도 이분탐색을 사용하고 싶을것
+        // 그러면 결정조건을 찾아보자.
+
+        // 두 배열을 합친 상황이라면 n + m 길이의 중간 지점이 있을것이다.
+        // 예를들어 3 + 4 라면 3번 인덱스가 중간지점일 것이고 총 개수는 4개 필요하다.
+        // 그러면 합친배열에서는 n + m / 2 + 1개의 원소가 각 배열에서 부터 필요하다.
+
+        // 그럼 각 배열에서 꺼내온 개수의 합이 위의 (n + m) / 2 + 1개여야 하는데,
+        // 예를들어 3, 4인 상황에서는 4개가 필요한데 그 원소들은 각 배열에서 무조건 앞에서 뽑아야 한다.
+        // 왜냐하면 그래야 정렬된 구조를 유지할 수 있어서 중간 인덱스가 중앙값이 된다.
+        // 위에서 2개 아래에서 2개를 뽑는다고 가정해보자.
+        
+        // 그리고 최대 개수는 작은 배열 기준으로 잡는게 오버플로가 안나서 좋다.
+        // 그렇게 2개를 뽑기위해 선별하면 경계선이 있을것이고, 경계선 내부의 값과 외부의 값을 가지고 서로 비교해야한다.
+        // 가능한 순간은 작은 배열의 경계선 내부의 값은 큰 배열의 경계선 밖의 값보다 작아야하고, 큰 배열의 경계선 내부의 값 또한 작은 배열의 경계선 밖의 값보다 작아야 한다.
+        // 만약 전자를 어긴거라면, 뽑은 작은 2개의 값에서 최대값이 기준치를 넘은것으로 작은배열의 사이즈를 줄여야 하고
+        // 후자를 어긴거라면 큰배열의 사이즈를 줄여야 한다.
         int n = small.length;
         int m = large.length;
-        int totalLeftCnt = (n + m) / 2 + (((n + m) & 1) == 1 ? 1 : 0);
-        int start = 0;
-        int end = small.length;
-        double answer = 0;
-        while(start <= end) {
-            int lCnt = (start + end) / 2;
-            int rCnt = (totalLeftCnt - lCnt);
-            int l1 = Integer.MIN_VALUE;
-            int r1 = Integer.MAX_VALUE;
-            int l2 = Integer.MIN_VALUE;
-            int r2 = Integer.MAX_VALUE;
-            
-            if (lCnt - 1 >= 0) {
-                l1 = small[lCnt - 1];
-            }
-            
-            if (lCnt < n) {
-                r1 = small[lCnt];
-            }
-            
-            if (rCnt - 1 >= 0) {
-                l2 = large[rCnt - 1];
-            }
+        int totalMiddleCnt = (n + m) / 2 + (((n + m) & 1) == 1 ? 1 : 0);
+
         
-            if (rCnt < m) {
-                r2 = large[rCnt];
+        int s = 0;
+        int e = small.length;
+        double ans = 0;
+        while(s <= e) {
+
+            int smid = (s + e) / 2;
+            int lmid = (totalMiddleCnt - smid);
+            
+            int sl = Integer.MIN_VALUE;
+            int sr = Integer.MAX_VALUE;
+            int ll = Integer.MIN_VALUE;
+            int lr = Integer.MAX_VALUE;
+            if (smid - 1 > -1) {
+                sl = Math.max(sl, small[smid - 1]);
+            }
+            if (smid < n) {
+                sr = Math.min(sr, small[smid]);
+            }
+            if (lmid - 1 > -1) {
+                ll = Math.max(ll, large[lmid - 1]);
+            }
+            if (lmid < m) {
+                lr = Math.min(lr, large[lmid]);
             }
 
-            if (l1 <= r2 && r1 >= l2) {
+            if (sl <= lr && ll <= sr) {
                 if (((n + m) & 1) == 1) {
-                    answer = Math.max(l1, l2);
+                    ans = (double) Math.max(ll, sl);
                 } else {
-                    answer = ((double)(Math.max(l1, l2) + Math.min(r1, r2)) / 2);
+                    ans = (double) (Math.max(ll, sl) + Math.min(lr, sr)) / 2;
                 }
                 break;
-            } else if (l1 > r2) {
-                end = lCnt - 1;
-            } else {
-                start = lCnt + 1;
             }
-        }   
-        return answer;
+
+            if (sl > lr) {
+                e = smid - 1;
+            } else if (ll > sr) {
+                s = smid + 1;
+            }
+        }
+
+        
+        return ans;
     }
 
     public double solution1(int[] nums1, int[] nums2) {
