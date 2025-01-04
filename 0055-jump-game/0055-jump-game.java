@@ -13,8 +13,22 @@ class Solution {
         // 0: 가능, 1: 불가능, -1: 도달한 적 없음
         Arrays.fill(memo, -1);
         if (nums.length == 1) return true;
-        dfs(0, nums);
-        return memo[0] == 0;
+
+        int[] dp = new int[nums.length];
+        boolean[] isReached = new boolean[nums.length];
+        isReached[0] = true;
+        for(int i = 1; i < nums.length; i++) {
+            boolean flag = false;
+            for(int j = i - 1; j > -1; j--) {
+                if (i - j <= nums[j]) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) return false;
+        }
+        
+        return true;
     }
     static int dfs(int depth, int[] nums) {
         if (memo[0] == 0) return 0;
